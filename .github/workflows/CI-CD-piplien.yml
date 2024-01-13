@@ -47,7 +47,11 @@ jobs:
        git add myapp/version.txt
        git commit -m "Update pom.xml,version.txt with ${{ steps.increment-patch-version.outputs.patch_version }}"
        git push
-
+   - name: Use Secrets in Environment Variables
+     env:
+       MY_SECRET: ${{ steps.increment-patch-version.outputs.patch_version }}
+     run: |
+       echo "patch_version: $MY_SECRET"
    - name: Build and push Docker image
      env:
        PATCH_VERSION: ${{ steps.increment-patch-version.outputs.patch_version }}
