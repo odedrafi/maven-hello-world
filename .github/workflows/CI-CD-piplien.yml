@@ -76,10 +76,13 @@ jobs:
     runs-on: ubuntu-latest
     needs: CI
     steps:
+    - name: Checkout code
+      uses: actions/checkout@v2
+
     - name: Get image tag
       id: Get_image_tag
       run: |
-        echo "old_version=$(cat myapp/version.txt)"
+        echo "tag=$(cat myapp/version.txt)"
         echo "tag=$(cat myapp/version.txt)" >> $GITHUB_OUTPUT
 
     - name: Download Docker image and run
