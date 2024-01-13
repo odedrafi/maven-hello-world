@@ -9,6 +9,4 @@ RUN mvn clean install
 FROM openjdk:17-slim
 WORKDIR /app
 COPY --from=build /app/target/myapp-*.jar myapp.jar
-ARG APP_VERSION=1.0.0
-ENV APP_VERSION=${APP_VERSION}
 CMD ["java", "-jar", "myapp.jar"]

@@ -54,7 +54,8 @@ jobs:
        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}        
      run: |
-       docker build --build-arg APP_VERSION=$PATCH_VERSION -t myapp:$PATCH_VERSION .
+       eco $patch_version $PATCH_VERSION
+       docker build myapp:$PATCH_VERSION .
        docker build -t myapp:$PATCH_VERSION .
        echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
        docker tag myapp:$PATCH_VERSION $DOCKER_USERNAME/myapp:$PATCH_VERSION
