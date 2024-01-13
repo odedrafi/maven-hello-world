@@ -49,7 +49,6 @@ jobs:
        git push
    - name: Build and push Docker image
      env:
-       MY_SECRET: ${{ steps.increment-patch-version.outputs.patch_version }}
        PATCH_VERSION: ${{ steps.increment-patch-version.outputs.patch_version }}
        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}        
@@ -79,12 +78,13 @@ jobs:
     steps:
     - name: Download Docker image and run
       env:
+        PATCH_VERSION: ${{ steps.increment-patch-version.outputs.patch_version }}
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
       run: |
         echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-        docker pull $DOCKER_USERNAME/myapp:$patch_version
-        docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$patch_version
+        docker pull $DOCKER_USERNAME/myapp:$PATCH_VERSION
+        docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$PATCH_VERSION
     # # helm deployment
     # - name: Checkout code
     #   uses: actions/checkout@v2
