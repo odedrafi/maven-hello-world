@@ -52,7 +52,7 @@ jobs:
      env:
        PATCH_VERSION: ${{ steps.increment-patch-version.outputs.patch_version }}
        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-       DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}        
+       DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}        
      run: |
        echo ${{ steps.increment-patch-version.outputs.patch_version }} $PATCH_VERSION
        docker build myapp:$PATCH_VERSION .
