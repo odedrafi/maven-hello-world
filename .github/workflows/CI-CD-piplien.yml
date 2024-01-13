@@ -82,6 +82,7 @@ jobs:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
         DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
       run: |
+        echo $PATCH_VERSION
         echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
         docker pull $DOCKER_USERNAME/myapp:$PATCH_VERSION
         docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$PATCH_VERSION
