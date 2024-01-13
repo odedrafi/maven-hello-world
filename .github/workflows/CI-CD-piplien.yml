@@ -80,9 +80,9 @@ jobs:
     - name: Download Docker image and run
       env:
         DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
+        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
       run: |
-        echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+        echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
         docker pull $DOCKER_USERNAME/myapp:$patch_version
         docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$patch_version
     # # helm deployment
