@@ -57,7 +57,7 @@ jobs:
        echo "patch_version: $MY_SECRET"
        echo "${{ steps.increment-patch-version.outputs.patch_version }} $PATCH_VERSION"
        echo "$DOCKER_USERNAME"
-       docker build myapp:$PATCH_VERSION .
+       echo "docker build myapp:$PATCH_VERSION ."
        docker build -t myapp:$PATCH_VERSION .
        echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
        docker tag myapp:$PATCH_VERSION $DOCKER_USERNAME/myapp:$PATCH_VERSION
