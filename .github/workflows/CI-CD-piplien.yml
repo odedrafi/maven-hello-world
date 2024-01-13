@@ -22,7 +22,7 @@ jobs:
      id: read-old-version
      run: |
        echo "old_version=$(cat myapp/version.txt)"
-       echo "old_version=$(cat myapp/version.txt)" >> $GITHUB_ENV
+       echo "old_version=$(cat myapp/version.txt)" >> $GITHUB_OUTPUT
 
    - name: Increment Patch Version
      id: increment-patch-version
@@ -30,14 +30,14 @@ jobs:
        # Set the new version
        new_version="1.0.${GITHUB_RUN_NUMBER}"
 
-       echo "patch_version=${new_version}" >> $GITHUB_ENV
+       echo "patch_version=${new_version}" >> $GITHUB_OUTPUT
        echo "New Version: ${new_version}"
        echo "New Version: ${new_version}" > myapp/version.txt 
        cat myapp/version.txt 
 
    - name: Update Version $ Pom File
      run: |
-      sed -i "0,/<version>[^<]*<\/version>/ s|<version>[^<]*</version>|<version>$patch_version-SNAPSHOT</version>|" myapp/pom.xml
+      sed -i "0,/<version>[^<]*<\/version>/ s|<version>[^<]*</version>|<version>${{ steps.increment-patch-version.outputs.patch_version }}-SNAPSHOT</version>|" myapp/pom.xml
       cat myapp/pom.xml       
    - name: Commit and push version file
      run: |
@@ -45,16 +45,16 @@ jobs:
        git config user.email "actions@github.com"
        git status
        git add myapp/version.txt
-       git commit -m "Update pom.xml,version.txt with $patch_version"
+       git commit -m "Update pom.xml,version.txt with ${{ steps.increment-patch-version.outputs.patch_version }}"
        git push
 
    - name: Build and push Docker image
      env:
-       PATCH_VERSION: $patch_version
+       PATCH_VERSION: ${{ steps.increment-patch-version.outputs.patch_version }}
        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}        
      run: |
-       echo $patch_version $PATCH_VERSION
+       echo ${{ steps.increment-patch-version.outputs.patch_version }} $PATCH_VERSION
        docker build myapp:$PATCH_VERSION .
        docker build -t myapp:$PATCH_VERSION .
        echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
