@@ -55,6 +55,7 @@ jobs:
        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}        
      run: |
        echo ${{ steps.increment-patch-version.outputs.patch_version }} $PATCH_VERSION
+       echo $DOCKER_USERNAME
        docker build myapp:$PATCH_VERSION .
        docker build -t myapp:$PATCH_VERSION .
        echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
