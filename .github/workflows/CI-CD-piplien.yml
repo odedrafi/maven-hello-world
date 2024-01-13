@@ -54,7 +54,7 @@ jobs:
        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}        
      run: |
-       eco $patch_version $PATCH_VERSION
+       echo $patch_version $PATCH_VERSION
        docker build myapp:$PATCH_VERSION .
        docker build -t myapp:$PATCH_VERSION .
        echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
