@@ -25,17 +25,8 @@ jobs:
    - name: Increment Patch Version
      id: increment-patch-version
      run: |
-       # Extract major, minor, and patch components
-       IFS='.' read -r -a version_parts <<< "${{ steps.read-old-version.outputs.old_version }}"
-       major="${version_parts[0]}"
-       minor="${version_parts[1]}"
-       patch="${version_parts[2]}"
-
-       # Increment the patch component
-       ((patch++))
-
        # Set the new version
-       new_version="${major}.${minor}.${patch}"
+       new_version="1.0.${GITHUB_RUN_NUMBER}"
 
        echo "::set-output name=patch_version::${new_version}"
        echo "New Version: ${new_version}" > myapp/version.txt 
