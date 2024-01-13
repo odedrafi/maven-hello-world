@@ -95,6 +95,7 @@ jobs:
         echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
         docker pull $DOCKER_USERNAME/myapp:$TAG
         docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$TAG
+        docker logs -f myapp-container
     # # helm deployment
     # - name: Checkout code
     #   uses: actions/checkout@v2
