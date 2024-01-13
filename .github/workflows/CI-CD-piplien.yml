@@ -32,7 +32,7 @@ jobs:
 
        echo "patch_version=${new_version}" >> $GITHUB_OUTPUT
        echo "New Version: ${new_version}"
-       echo "New Version: ${new_version}" > myapp/version.txt 
+       echo "${new_version}" > myapp/version.txt 
        cat myapp/version.txt 
 
    - name: Update Version $ Pom File
@@ -93,7 +93,7 @@ jobs:
       run: |
         echo $TAG
         echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-        docker pull myapp:$TAG
+        docker pull $DOCKER_USERNAME/myapp:$TAG
         docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$TAG
     # # helm deployment
     # - name: Checkout code
