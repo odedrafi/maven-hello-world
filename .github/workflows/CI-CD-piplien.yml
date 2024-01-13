@@ -19,11 +19,11 @@ jobs:
        java-version: '17'
    - name: Increment Patch Version
      id: update-app-version
-     run: echo "::set-output name=patch_version::$(($(cat version.txt) + 1))"
+     run: echo "::set-output name=patch_version::$(($(cat myapp/version.txt) + 1))"
 
    - name: Update Version $ Pom File
      run: |
-      echo ${{ steps.update-app-version.outputs.patch_version }} > version.txt
+      echo ${{ steps.update-app-version.outputs.patch_version }} > myapp/version.txt
       sed -i "0,/<version>[^<]*<\/version>/ s|<version>[^<]*</version>|<version>${{ steps.update-app-version.outputs.patch_version }}-SNAPSHOT</version>|" myapp/pom.xml
     
    - name: Build and push Docker image
