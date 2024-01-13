@@ -47,24 +47,34 @@ jobs:
        git add myapp/version.txt
        git commit -m "Update pom.xml,version.txt with ${{ steps.increment-patch-version.outputs.patch_version }}"
        git push
-   - name: Use Secrets in Environment Variables
-     env:
-       MY_SECRET: ${{ steps.increment-patch-version.outputs.patch_version }}
-     run: |
-       echo "patch_version: $MY_SECRET"
    - name: Build and push Docker image
      env:
+       MY_SECRET: ${{ steps.increment-patch-version.outputs.patch_version }}
        PATCH_VERSION: ${{ steps.increment-patch-version.outputs.patch_version }}
        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}        
      run: |
-       echo ${{ steps.increment-patch-version.outputs.patch_version }} "$PATCH_VERSION"
+       echo "patch_version: $MY_SECRET"
+       echo "${{ steps.increment-patch-version.outputs.patch_version }} $PATCH_VERSION"
        echo "$DOCKER_USERNAME"
        docker build myapp:$PATCH_VERSION .
        docker build -t myapp:$PATCH_VERSION .
        echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
        docker tag myapp:$PATCH_VERSION $DOCKER_USERNAME/myapp:$PATCH_VERSION
-       docker push $DOCKER_USERNAME/maven-hello-world:$PATCH_VERSION
+       docker push $DOCKER_USERNAME/maven-hello-world:$PATCH_VERSION       
+  #  - name: Build and push Docker image
+  #    env:
+  #      PATCH_VERSION: ${{ steps.increment-patch-version.outputs.patch_version }}
+  #      DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+  #      DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}        
+  #    run: |
+  #      echo ${{ steps.increment-patch-version.outputs.patch_version }} $PATCH_VERSION"
+  #      echo "$DOCKER_USERNAME"
+  #      docker build myapp:$PATCH_VERSION .
+  #      docker build -t myapp:$PATCH_VERSION .
+  #      echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+  #      docker tag myapp:$PATCH_VERSION $DOCKER_USERNAME/myapp:$PATCH_VERSION
+  #      docker push $DOCKER_USERNAME/maven-hello-world:$PATCH_VERSION
   CD:
     runs-on: ubuntu-latest
     needs: CI
