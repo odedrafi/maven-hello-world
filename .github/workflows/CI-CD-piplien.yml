@@ -33,17 +33,18 @@ jobs:
        echo "patch_version=${new_version}" >> $GITHUB_ENV
        echo "New Version: ${new_version}"
        echo "New Version: ${new_version}" > myapp/version.txt 
+       cat myapp/version.txt 
 
    - name: Update Version $ Pom File
      run: |
       sed -i "0,/<version>[^<]*<\/version>/ s|<version>[^<]*</version>|<version>$patch_version-SNAPSHOT</version>|" myapp/pom.xml
-            
+      cat myapp/pom.xml       
    - name: Commit and push version file
      run: |
        git config user.name "GitHub Actions"
        git config user.email "actions@github.com"
-       git add version.txt
-       git add pom.xml
+       git status
+       git add myapp/version.txt
        git commit -m "Update pom.xml,version.txt with $patch_version"
        git push
 
