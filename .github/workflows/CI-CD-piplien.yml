@@ -24,7 +24,7 @@ jobs:
    - name: Update Version $ Pom File
      run: |
       echo ${{ steps.update-app-version.outputs.patch_version }} > version.txt
-      sed -i "0,/<version>[^<]*<\/version>/ s|<version>[^<]*</version>|<version>${{ steps.update-app-version.outputs.patch_version }}-SNAPSHOT</version>|" pom.xml
+      sed -i "0,/<version>[^<]*<\/version>/ s|<version>[^<]*</version>|<version>${{ steps.update-app-version.outputs.patch_version }}-SNAPSHOT</version>|" myapp/pom.xml
     
    - name: Build and push Docker image
      env:
