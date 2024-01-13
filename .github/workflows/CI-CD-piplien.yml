@@ -20,7 +20,9 @@ jobs:
 
    - name: Read Old Version
      id: read-old-version
-     run: echo "old_version=$(cat myapp/version.txt)" >> $$GITHUB_ENV
+     run: |
+       echo "old_version=$(cat myapp/version.txt)"
+       echo "old_version=$(cat myapp/version.txt)" >> $GITHUB_ENV
 
    - name: Increment Patch Version
      id: increment-patch-version
@@ -28,7 +30,8 @@ jobs:
        # Set the new version
        new_version="1.0.${GITHUB_RUN_NUMBER}"
 
-       echo "patch_version=${new_version}" >> $$GITHUB_ENV
+       echo "patch_version=${new_version}" >> $GITHUB_ENV
+       echo "New Version: ${new_version}"
        echo "New Version: ${new_version}" > myapp/version.txt 
 
    - name: Update Version $ Pom File
