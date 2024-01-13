@@ -44,7 +44,7 @@ jobs:
        git config user.name "GitHub Actions"
        git config user.email "actions@github.com"
        git status
-       git add myapp/version.txt
+       git add myapp/version.txt myapp/pom.xml
        git commit -m "Update pom.xml,version.txt with ${{ steps.increment_patch_version.outputs.patch_version }}"
        git push
    - name: Build and push Docker image
@@ -93,7 +93,7 @@ jobs:
       run: |
         echo $TAG
         echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-        docker pull $DOCKER_USERNAME/myapp:$TAG
+        docker pull myapp:$TAG
         docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$TAG
     # # helm deployment
     # - name: Checkout code
