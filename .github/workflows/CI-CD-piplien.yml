@@ -20,7 +20,7 @@ jobs:
 
    - name: Read Old Version
      id: read-old-version
-     run: echo "::set-output name=old_version::$(cat myapp/version.txt)"
+     run: echo "old_version=$(cat myapp/version.txt)" >> $$GITHUB_ENV
 
    - name: Increment Patch Version
      id: increment-patch-version
@@ -28,12 +28,12 @@ jobs:
        # Set the new version
        new_version="1.0.${GITHUB_RUN_NUMBER}"
 
-       echo "::set-output name=patch_version::${new_version}"
+       echo "patch_version=${new_version}" >> $$GITHUB_ENV
        echo "New Version: ${new_version}" > myapp/version.txt 
 
    - name: Update Version $ Pom File
      run: |
-      sed -i "0,/<version>[^<]*<\/version>/ s|<version>[^<]*</version>|<version>${{ steps.update-app-version.outputs.patch_version }}-SNAPSHOT</version>|" myapp/pom.xml
+      sed -i "0,/<version>[^<]*<\/version>/ s|<version>[^<]*</version>|<version>$patch_version-SNAPSHOT</version>|" myapp/pom.xml
             
    - name: Commit and push version file
      run: |
@@ -41,12 +41,12 @@ jobs:
        git config user.email "actions@github.com"
        git add version.txt
        git add pom.xml
-       git commit -m "Update pom.xml,version.txt with ${{ steps.update-app-version.outputs.patch_version }}"
+       git commit -m "Update pom.xml,version.txt with $patch_version"
        git push
 
    - name: Build and push Docker image
      env:
-       PATCH_VERSION: ${{ steps.update-app-version.outputs.patch_version }}
+       PATCH_VERSION: $patch_version
        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
        DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}        
      run: |
@@ -65,8 +65,8 @@ jobs:
         DOCKER_PASSWORD: ${{ secrets.DOCKER_PASSWORD }}
       run: |
         echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-        docker pull $DOCKER_USERNAME/myapp:${{ needs.update-app-version.PATCH_VERSION }}
-        docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:${{ needs.update-app-version.outputs.PATCH_VERSION }}
+        docker pull $DOCKER_USERNAME/myapp:$patch_version
+        docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$patch_version
     # # helm deployment
     # - name: Checkout code
     #   uses: actions/checkout@v2
