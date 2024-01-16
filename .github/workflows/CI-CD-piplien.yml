@@ -111,6 +111,12 @@ jobs:
       env:
         TAG: ${{ steps.Get_image_tag.outputs.tag }}
       run: |
+        minikube status
+        kubectl get nodes
+        kubectl get pods
         command="helm upgrade --install myapp helm/myapp-chart/ -n default --set image.tag=$TAG"
         echo $command
         $command
+        kubectl get pods 
+        helm ls
+        kubectl logs -l app.kubernetes.io/instance=myapp
