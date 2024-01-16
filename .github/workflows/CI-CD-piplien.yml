@@ -111,7 +111,6 @@ jobs:
       env:
         TAG: ${{ steps.Get_image_tag.outputs.tag }}
       run: |
-        # sed -i "s|tag:*|tag: '$TAG'|g" helm/myapp-chart/values.yaml
         cat helm/myapp-chart/values.yaml
         command="helm upgrade --install myapp helm/myapp-chart/ -n default --set image.tag=$TAG"
         echo $command
