@@ -9,5 +9,5 @@ RUN mvn compile
 FROM openjdk:17-slim
 WORKDIR /app
 COPY --from=build /app/target/ target/
-# CMD ["java", "-cp", "target/classes", "com.myapp.App"]
-CMD ["sh", "-c", "java -cp target/classes com.myapp.App && tail -f /dev/null"]
+CMD ["java", "-cp", "target/classes", "com.myapp.App"]
+# CMD ["sh", "-c", "java -cp target/classes com.myapp.App && tail -f /dev/null"]
