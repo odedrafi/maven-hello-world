@@ -113,4 +113,4 @@ jobs:
       run: |
         sed -i "s|imageTag:.*|imageTag: '$TAG'|g" helm/myapp-chart/values.yaml
         helm upgrade --install myapp helm/myapp-chart/
-        kubectl logs -l app.kubernetes.io/instance=maven-hello
+        kubectl logs -l app.kubernetes.io/instance=myapp
