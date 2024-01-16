@@ -89,19 +89,19 @@ jobs:
         docker stop myapp-container
 
 
-    - name: Install Minikube
-      run: |
-        sudo apt-get update
-        sudo apt-get install -y conntrack
-        curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
-        sudo dpkg -i minikube_latest_amd64.deb
-        minikube version
+    # - name: Install Minikube
+    #   run: |
+    #     sudo apt-get update
+    #     sudo apt-get install -y conntrack
+    #     curl -LO https://storage.googleapis.com/minikube/releases/latest/minikube_latest_amd64.deb
+    #     sudo dpkg -i minikube_latest_amd64.deb
+    #     minikube version
 
       # Add Minikube cluster setup step
-    - name: Setup Minikube Cluster
-      run: |
-        minikube start --kubernetes-version=latest
-        kubectl config use-context minikube 
+    # - name: Setup Minikube Cluster
+    #   run: |
+    #     minikube start --kubernetes-version=latest
+    #     kubectl config use-context minikube 
 
     # helm deployment
     - name: Checkout code
@@ -112,5 +112,6 @@ jobs:
         TAG: ${{ steps.Get_image_tag.outputs.tag }}
       run: |
         sed -i "s|tag:*|tag: '$TAG'|g" helm/myapp-chart/values.yaml
+        cat helm/myapp-chart/values.yaml
         helm upgrade --install myapp helm/myapp-chart/ -n default
         kubectl logs -l app.kubernetes.io/instance=myapp
