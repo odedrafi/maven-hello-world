@@ -6,7 +6,7 @@ replicaCount: 1
 
 image:
   repository: oded12/myapp
-  tag: ""
+  tag:
 
 imagePullSecrets: []
 nameOverride: "myapp"
