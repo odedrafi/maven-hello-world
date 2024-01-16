@@ -100,20 +100,19 @@ jobs:
       # Add Minikube cluster setup step
     - name: Setup Minikube Cluster
       run: |
-        minikube start --kubernetes-version=latest
-        kubectl config use-context minikube 
+        minikube start
 
     # helm deployment
     - name: Deploy with Helm
       env:
         TAG: ${{ steps.Get_image_tag.outputs.tag }}
       run: |
+        kubectl config use-context minikube 
         minikube status
         kubectl get nodes
-        kubectl get pods
+        kubectl get pods -A
         command="helm upgrade --install myapp helm/myapp-chart/ -n default --set image.tag=$TAG --debug --wait"
         echo $command
         $command
-        kubectl get pods -A
         helm ls
         kubectl logs -l app.kubernetes.io/instance=myapp
