@@ -113,5 +113,7 @@ jobs:
       run: |
         # sed -i "s|tag:*|tag: '$TAG'|g" helm/myapp-chart/values.yaml
         cat helm/myapp-chart/values.yaml
-        helm upgrade --install myapp helm/myapp-chart/ -n default --set image.tag=$TAG
+        command="helm upgrade --install myapp helm/myapp-chart/ -n default --set image.tag=$TAG"
+        echo $command
+        $command
         kubectl logs -l app.kubernetes.io/instance=myapp
