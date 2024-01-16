@@ -71,6 +71,7 @@ jobs:
     - name: Get image tag
       id: Get_image_tag
       run: |
+        git pull
         echo "tag=$(cat myapp/version.txt)"
         echo "tag=$(cat myapp/version.txt)" >> $GITHUB_OUTPUT
 
