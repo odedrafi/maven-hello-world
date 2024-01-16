@@ -111,7 +111,7 @@ jobs:
         minikube status
         kubectl get nodes
         kubectl get pods
-        command="helm upgrade --install myapp helm/myapp-chart/ -n default --set image.tag=$TAG"
+        command="helm upgrade --install myapp helm/myapp-chart/ -n default --set image.tag=$TAG --debug --wait"
         echo $command
         $command
         kubectl get pods -A
