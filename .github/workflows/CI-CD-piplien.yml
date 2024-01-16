@@ -75,17 +75,17 @@ jobs:
         echo "tag=$(cat myapp/version.txt)"
         echo "tag=$(cat myapp/version.txt)" >> $GITHUB_OUTPUT
 
-    - name: Download Docker image and run
-      env:
-        TAG: ${{ steps.Get_image_tag.outputs.tag }}
-        DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
-        DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
-      run: |
-        echo $TAG
-        echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
-        docker pull $DOCKER_USERNAME/myapp:$TAG
-        docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$TAG
-        docker logs -f myapp-container
+    # - name: Download Docker image and run
+    #   env:
+    #     TAG: ${{ steps.Get_image_tag.outputs.tag }}
+    #     DOCKER_USERNAME: ${{ secrets.DOCKER_USERNAME }}
+    #     DOCKER_HUB_PASSWORD: ${{ secrets.DOCKER_HUB_PASSWORD }}
+    #   run: |
+    #     echo $TAG
+    #     echo $DOCKER_HUB_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
+    #     docker pull $DOCKER_USERNAME/myapp:$TAG
+    #     docker run -d --name myapp-container -p 8080:8080 $DOCKER_USERNAME/myapp:$TAG
+    #     docker logs -f myapp-container
 
     - name: Install Minikube
       run: |
